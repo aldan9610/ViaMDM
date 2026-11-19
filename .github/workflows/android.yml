@@ -34,8 +34,10 @@ jobs:
       - name: AAR del túnel (SDK de zrok)
         run: |
           mkdir -p app/libs
+          # Dentro del módulo: la comprobación de gomobile lee el go.mod de tunnel/
+          cd tunnel
           gomobile bind -target=android -androidapi 26 \
-            -o app/libs/viamdm-tunnel.aar ./tunnel
+            -o ../app/libs/viamdm-tunnel.aar .
 
       - uses: gradle/actions/setup-gradle@v4
         with:
