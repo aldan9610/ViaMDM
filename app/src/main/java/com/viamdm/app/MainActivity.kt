@@ -144,11 +144,13 @@ class MainActivity : AppCompatActivity() {
         val wv = WebView(this)
         wv.settings.javaScriptEnabled = true
         wv.settings.domStorageEnabled = true
-        wv.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPAT_MODE
+        wv.settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
         CookieManager.getInstance().setAcceptCookie(true)
         CookieManager.getInstance().setAcceptThirdPartyCookies(wv, true)
         wv.webViewClient = TabClient()
         wv.webChromeClient = WebChromeClient()
+        // Las descargas que el WebView detecta: al servidor primero, al móvil si el usuario quiere.
+        wv.setDownloadListener { url, _, _, _, _ -> offerToMdm(url) }
         wv.setBackgroundColor(Color.WHITE)
         tabs.add(wv)
         current = tabs.size - 1
@@ -393,10 +395,6 @@ class MainActivity : AppCompatActivity() {
             } else {
                 null
             }
-        }
-
-        override fun onDownloadStart(url: String, ua: String?, content: String?, mime: String?, length: Long) {
-            offerToMdm(url)
         }
     }
 

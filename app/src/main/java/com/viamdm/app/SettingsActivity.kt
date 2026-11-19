@@ -34,7 +34,17 @@ class SettingsActivity : AppCompatActivity() {
         scroll.addView(root, ViewGroup.LayoutParams(-1, -2))
         setContentView(scroll)
 
-        title(getString(R.string.settings_title))
+        title = getString(R.string.settings_title)
+        // Las etiquetas de sección, añadidas a la columna que se está construyendo.
+        val label: (Int) -> Unit = { res ->
+            root.addView(
+                TextView(this).apply {
+                    text = getString(res)
+                    textSize = 15f
+                    setPadding(0, dp(14), 0, dp(4))
+                },
+            )
+        }
 
         label(R.string.settings_account)
         val account = edit(secrets.zrokAccountToken, password = true)
@@ -119,7 +129,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val save = Button(this).apply { text = getString(R.string.save) }
-        root.addView(save, LinearLayout.LayoutParams(-1, ViewGroup.LayoutParams.WRAP_CONTENT).setMargins(0, dp(18), 0, 0))
+        val saveLp = LinearLayout.LayoutParams(-1, ViewGroup.LayoutParams.WRAP_CONTENT)
+        saveLp.setMargins(0, dp(18), 0, 0)
+        root.addView(save, saveLp)
         save.setOnClickListener {
             secrets.zrokAccountToken = account.text.toString()
             secrets.zrokApiEndpoint = endpoint.text.toString()
@@ -154,13 +166,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun dp(n: Int): Int = (n * resources.displayMetrics.density).toInt()
 
-    private fun label(res: Int) = root.addView(
-        TextView(this).apply {
-            text = getString(res)
-            textSize = 15f
-            setPadding(0, dp(14), 0, dp(4))
-        },
-    )
 
     private fun edit(value: String, password: Boolean = false): EditText =
         EditText(this).apply {

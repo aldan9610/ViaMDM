@@ -104,7 +104,7 @@ class MdmClient(private val secrets: Secrets) {
  * El gestor de confianza del pin: acepta el certificado cuyo SHA-256 está guardado, o
  * cualquiera si aún no hay pin (el emparejamiento es el primer uso y lo guarda).
  */
-class PinTrustManager(private val secrets: Secrets) : X509ExtendedTrustManager() {
+class PinTrustManager(private val secrets: Secrets) : javax.net.ssl.X509TrustManager {
 
     private fun check(chain: Array<X509Certificate>) {
         if (chain.isEmpty()) throw CertificateException("Sin certificado")
@@ -123,11 +123,7 @@ class PinTrustManager(private val secrets: Secrets) : X509ExtendedTrustManager()
             .joinToString("") { "%02x".format(it) }
 
     override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
-    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) {}
-    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String, engine: javax.net.ssl.SSLEngine) {}
     override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) = check(chain)
-    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, socket: Socket) = check(chain)
-    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String, engine: javax.net.ssl.SSLEngine) = check(chain)
     override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
 }
 

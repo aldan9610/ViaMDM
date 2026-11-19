@@ -59,7 +59,7 @@ class ExplorerActivity : AppCompatActivity() {
             }
         }
         list.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, i, _ ->
-            val entry = entries.getOrNull(i) ?: return@OnItemLongClickListener
+            val entry = entries.getOrNull(i) ?: return@OnItemLongClickListener true
             AlertDialog.Builder(this)
                 .setItems(
                     arrayOf(
