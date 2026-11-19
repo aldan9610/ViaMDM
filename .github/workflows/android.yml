@@ -1,4 +1,4 @@
-# Construye la AAR del módulo Go (SDK de zrok) y la APK, y firma el release.
+# Construye la AAR del módulo Go (SDK de zrok) y la APK, y firma el release si hay keystore.
 name: android
 
 on:
@@ -32,39 +32,49 @@ jobs:
 
       - name: AAR del túnel (SDK de zrok)
         run: |
+          mkdir -p app/libs
           gomobile bind -target=android -androidapi 26 \
             -o app/libs/viamdm-tunnel.aar ./tunnel
 
-      - name: APK
-        uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: wrapper
-      - run: gradle assembleDebug
+          gradle-version: "8.10.2"
 
-      - name: Firma del release (si hay keystore en los secretos)
-        if: ${{ secrets.APK_KEYSTORE_BASE64 != '' }}
+      - name: Compilar la APK
+        run: gradle assembleDebug
+
+      - name: Keystore del release (si los secretos la traen)
+        env:
+          APK_KEYSTORE_BASE64: ${{ secrets.APK_KEYSTORE_BASE64 }}
         run: |
-          echo "${{ secrets.APK_KEYSTORE_BASE64 }}" | base64 -d > release.keystore
-          cat > keystore.properties <<PROPS
+          if [ -n "$APK_KEYSTORE_BASE64" ]; then
+            echo "$APK_KEYSTORE_BASE64" | base64 -d > release.keystore
+            cat > keystore.properties <<PROPS
           storeFile=$(pwd)/release.keystore
           storePassword=${{ secrets.APK_KEYSTORE_PASSWORD }}
           keyAlias=${{ secrets.APK_KEY_ALIAS }}
           keyPassword=${{ secrets.APK_KEY_PASSWORD }}
           PROPS
+          else
+            echo "Sin keystore: solo el APK de debug en los artefactos."
+          fi
 
-      - name: Release
+      - name: APK firmada (release)
+        if: ${{ secrets.APK_KEYSTORE_BASE64 != '' }}
+        run: gradle assembleRelease
+
+      - name: Release en GitHub
         if: ${{ secrets.APK_KEYSTORE_BASE64 != '' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v0.1.0
           files: |
-            app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/apk/release/app-release.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Artefacto (debug) en cada push
+      - name: Artefacto de debug en cada push
         uses: actions/upload-artifact@v4
         with:
           name: viamdm-debug-apk
