@@ -215,7 +215,10 @@ class DriveClient(private val base: String, private val context: android.content
         conn.setRequestProperty("Content-Type", "application/xml")
         if (conn.responseCode / 100 != 2) throw IllegalStateException("El servidor dijo ${conn.responseCode}")
         val text = conn.inputStream.bufferedReader().readText()
-        parseMultistatus(text).sortedWith(compareByDescending<Entry> { it.isFolder }.thenBy { it.name.lowercase() })
+        // El primer <response> es la carpeta pedida (su href es el propio): fuera, quedan los hijos.
+        val self = if (path.endsWith("/")) path else "$path/"
+        parseMultistatus(text).filter { it.href != self }
+            .sortedWith(compareByDescending<Entry> { it.isFolder }.thenBy { it.name.lowercase() })
     }
 
     private fun parseMultistatus(xml: String): List<Entry> {
@@ -225,7 +228,6 @@ class DriveClient(private val base: String, private val context: android.content
         var inResponse = false
         var href = ""
         var folder = false
-        var inSelf = false
         var event = parser.eventType
         while (event != org.xmlpull.v1.XmlPullParser.END_DOCUMENT) {
             when (event) {
@@ -237,11 +239,9 @@ class DriveClient(private val base: String, private val context: android.content
                 org.xmlpull.v1.XmlPullParser.END_TAG -> if (parser.name == "response" && inResponse) {
                     inResponse = false
                     val name = java.net.URLDecoder.decode(href.trimEnd('/').substringAfterLast('/'), "UTF-8")
-                    if (name.isNotEmpty() && !inSelf) entries.add(Entry(name, href, folder))
+                    if (name.isNotEmpty()) entries.add(Entry(name, href, folder))
                 }
             }
-            // El primer <response> es la propia carpeta: sus hijos son el resto.
-            inSelf = entries.isEmpty() && inResponse && href == ""
             event = parser.next()
         }
         return entries
