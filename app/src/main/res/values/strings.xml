@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ViaMDM</string>
+    <string name="omnibox_hint">Busca o escribe una dirección</string>
+
+    <string name="menu_send">Enviar esta página a MDM</string>
+    <string name="menu_server">Servidor MDM (cola)</string>
+    <string name="menu_explorer">Archivos del servidor</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_night">Modo nocturno</string>
+    <string name="menu_ua">Cambiar agente de usuario</string>
+    <string name="menu_copy">Copiar la dirección</string>
+    <string name="menu_stop_tunnel">Apagar el túnel</string>
+
+    <string name="tabs_title">Pestañas</string>
+    <string name="tab_new">Nueva pestaña</string>
+    <string name="tab_empty">Vacía</string>
+    <string name="copied">Dirección copiada</string>
+
+    <string name="send_title">¿Qué hago con el enlace?</string>
+    <string name="send_mdm">Descargar en el servidor</string>
+    <string name="send_here">Descargar en el móvil</string>
+    <string name="send_browse">Solo navegar</string>
+    <string name="sent">Enviado al servidor</string>
+    <string name="send_failed">No se pudo enviar</string>
+    <string name="downloading_here">Descargando en el móvil</string>
+    <string name="pair_first">Empareja la app con el servidor primero (menú → Servidor MDM)</string>
+
+    <string name="pair_title">Emparejar con el servidor MDM</string>
+    <string name="pair_code_hint">El código de 8 dígitos que muestra el servidor</string>
+    <string name="pair_name_hint">Nombre de este móvil en la lista del servidor</string>
+    <string name="pair_go">Emparejar</string>
+    <string name="paired">Emparejado</string>
+    <string name="pair_failed">No se pudo emparejar</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_account">Token de cuenta de zrok (el de la cuenta; cada app tiene el suyo)</string>
+    <string name="settings_endpoint">Endpoint del servicio de zrok (vacío: el de zrok.io)</string>
+    <string name="settings_connections">Las tres conexiones del túnel (token privado y puerto local de cada una)</string>
+    <string name="share_token_hint">Token del share privado</string>
+    <string name="local_port">Puerto local:</string>
+    <string name="conn_api">API del servidor MDM (tcpTunnel)</string>
+    <string name="conn_socks">Salida del servidor (SOCKS5)</string>
+    <string name="conn_drive">Archivos del servidor (drive/WebDAV)</string>
+    <string name="settings_provider">Proveedor del túnel (aar con gomobile, o binario zrok en jniLib)</string>
+    <string name="settings_mode">Modo de navegación (direct: IP del móvil · server: IP del servidor por SOCKS5)</string>
+    <string name="settings_bridge">Puerto del puente CONNECT que usa el WebView</string>
+    <string name="settings_mdm">Servidor MDM (por el túnel: https://127.0.0.1:puerto)</string>
+    <string name="mdm_url_hint">https://127.0.0.1:8463</string>
+    <string name="setup_uri_hint">Pega aquí el texto del QR del servidor (mdm-tunnel://setup?…)</string>
+    <string name="read_setup">Leer la configuración del QR</string>
+    <string name="setup_applied">Configuración aplicada</string>
+    <string name="setup_bad">Ese texto no es un QR de configuración de MDM</string>
+    <string name="save">Guardar (y reiniciar el túnel)</string>
+    <string name="saved">Ajustes guardados</string>
+
+    <string name="tunnel_channel">Estado del túnel</string>
+    <string name="tunnel_notification">Túnel zrok</string>
+    <string name="tunnel_starting">Encendiendo el túnel…</string>
+    <string name="tunnel_no_token">Sin token de cuenta de zrok: pónlo en Ajustes</string>
+    <string name="tunnel_enable_failed">El servicio de zrok rechazó el entorno</string>
+    <string name="tunnel_no_connections">Túnel encendido, sin conexiones: faltan tokens de share</string>
+    <string name="tunnel_up_prefix">Túnel encendido:</string>
+    <string name="tunnel_up">Túnel encendido: %1$s</string>
+    <string name="tunnel_stopped">Túnel apagado</string>
+    <string name="proxy_failed">El modo de red no se aplicó</string>
+    <string name="mode_server">Navegando con la IP del servidor</string>
+    <string name="mode_direct">Navegando con la IP del móvil</string>
+
+    <string name="explorer_title">Archivos del servidor</string>
+    <string name="explorer_path">Carpeta: %1$s</string>
+    <string name="explorer_to_mdm">Enviar al MDM como descarga</string>
+    <string name="explorer_download">Descargar al móvil</string>
+    <string name="explorer_delete">Borrar</string>
+    <string name="explorer_rename">Renombrar</string>
+    <string name="explorer_saved">Guardado en %1$s</string>
+    <string name="explorer_save_failed">No se pudo descargar</string>
+    <string name="explorer_list_failed">No se pudo listar la carpeta (¿está el túnel encendido?)</string>
+</resources>
