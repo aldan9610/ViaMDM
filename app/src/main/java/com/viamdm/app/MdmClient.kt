@@ -277,7 +277,7 @@ object WebViewProxy {
                 .addDirect().build()
             controller.setProxyOverride(config, executor, done)
         } else {
-            controller.clearProxyOverride(done)
+            controller.clearProxyOverride(executor, done)
         }
     }
 }
