@@ -267,12 +267,15 @@ object WebViewProxy {
         // setProxyOverride/clearProxyOverride piden un Runnable explícito (más un executor
         // opcional): el cambio se aplica en el próximo WebView que se cree.
         val done = java.lang.Runnable { onComplete(null) }
+        // El executor es obligatorio (@NonNull): uno que ejecuta en el mismo hilo basta, porque
+        // el cambio del proxy lo aplica el siguiente WebView que se cree.
+        val executor = java.util.concurrent.Executor { task -> task.run() }
         if (mode == "server") {
             val config = androidx.webkit.ProxyConfig.Builder()
                 .addProxyRule("http=127.0.0.1:$bridgePort")
                 .addProxyRule("https=127.0.0.1:$bridgePort")
                 .addDirect().build()
-            controller.setProxyOverride(config, null, done)
+            controller.setProxyOverride(config, executor, done)
         } else {
             controller.clearProxyOverride(done)
         }
